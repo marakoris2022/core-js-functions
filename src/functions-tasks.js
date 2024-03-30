@@ -18,7 +18,7 @@
  *
  */
 function getCurrentFunctionName() {
-  throw new Error('Not implemented');
+  return getCurrentFunctionName.name;
 }
 
 /**
@@ -32,8 +32,11 @@ function getCurrentFunctionName() {
  *   getFunctionBody(hiHello) => "function hiHello() { console.log('hello world'); }"
  *
  */
-function getFunctionBody(/* func */) {
-  throw new Error('Not implemented');
+function getFunctionBody(func) {
+  if (typeof func === 'function') {
+    return func.toString();
+  }
+  return '';
 }
 
 /**
@@ -50,8 +53,12 @@ function getFunctionBody(/* func */) {
  *  ]) => [0, 1, 2]
  *
  */
-function getArgumentsCount(/* funcs */) {
-  throw new Error('Not implemented');
+function getArgumentsCount(funcs) {
+  const retArr = [];
+  funcs.forEach((func) => {
+    retArr.push(func.length);
+  });
+  return retArr;
 }
 
 /**
@@ -70,8 +77,10 @@ function getArgumentsCount(/* funcs */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return (num) => {
+    return num ** exponent;
+  };
 }
 
 /**
@@ -87,8 +96,13 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...param) {
+  if (param.length === 0) return null;
+  return (x) => {
+    if (param.length === 1) return param[0];
+    if (param.length === 2) return param[0] * x + param[1];
+    return param[0] * x ** 2 + param[1] * x + param[2];
+  };
 }
 
 /**
@@ -105,8 +119,16 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const key = func.toString();
+  const cach = {};
+  return () => {
+    if (!cach[key]) {
+      cach[key] = func();
+      return cach[key];
+    }
+    return cach[key];
+  };
 }
 
 /**
@@ -124,8 +146,21 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return () => {
+    let currentAttempt = 1;
+    while (currentAttempt <= attempts) {
+      try {
+        return func();
+      } catch (error) {
+        if (currentAttempt === attempts) {
+          throw error;
+        }
+        currentAttempt += 1;
+      }
+    }
+    return func();
+  };
 }
 
 /**
